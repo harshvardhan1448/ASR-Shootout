@@ -40,7 +40,9 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 GOOGLE_CREDENTIALS_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "")
 
 # Models to benchmark
-MODELS_TO_TEST = ["deepgram", "whisper", "google"]  # Compare all models
+# Note: Google Cloud is kept in code but disabled by default (requires billing info)
+# To enable: Change to ["deepgram", "whisper", "google"]
+MODELS_TO_TEST = ["deepgram", "whisper"]  # Compare Deepgram and Whisper only
 
 
 class ASRBenchmark:

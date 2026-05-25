@@ -73,11 +73,13 @@ python asr_benchmark.py
 
 This will:
 1. ✓ Discover all audio files in `./recordings/`
-2. ✓ Send each to **Deepgram Nova-2**, **Whisper (local)**, and **Google Cloud Speech-to-Text**
+2. ✓ Send each to **Deepgram Nova-2** and **Whisper (local)**
 3. ✓ Compute Word Error Rate (WER), Character Error Rate (CER), and Entity-level accuracy
 4. ✓ Analyze failures by condition and locality
 5. ✓ Generate comparison reports and visualizations
 6. ✓ Save results to `./outputs/`
+
+*Note: Google Cloud Speech-to-Text is available in code but disabled by default (requires billing account).*
 
 ## Output Files
 
@@ -102,7 +104,7 @@ comparison_table_YYYYMMDD_HHMMSS.csv      # Summary comparison across models
 
 ## Model Selection Rationale
 
-### Deepgram Nova-2 (Recommended)
+### Deepgram Nova-2 (Primary)
 - Fast, real-time conversational speech focused
 - Excellent for noisy environments (100% accuracy in tests)
 - Free tier: 50k minutes/month
@@ -116,42 +118,43 @@ comparison_table_YYYYMMDD_HHMMSS.csv      # Summary comparison across models
 - Baseline: `base` model
 - **Status**: ✅ Active in benchmark
 
-### Google Cloud Speech-to-Text (Enterprise)
+### Google Cloud Speech-to-Text (Optional)
 - Strong on accented speech and Hindi
 - Supports Indian English and code-switching
-- Highest accuracy but more expensive ($0.024-0.036 per 15 sec)
+- Highest accuracy but requires billing account
 - Enterprise SLA and support
-- **Status**: ✅ Active in benchmark (requires credentials.json)
+- **Status**: ⚠️ Available in code but disabled (requires bank/billing details)
+- To enable: Update `MODELS_TO_TEST` in asr_benchmark.py
 
 ## Testing Tips
 
-**Run with all 3 models** (recommended):
+**Run benchmark with both models** (default):
 ```bash
-# Ensure .env has all credentials configured:
-# - DEEPGRAM_API_KEY
-# - GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
-# - OPENAI_API_KEY (optional - can leave empty)
+# Compares Deepgram and Whisper
 python asr_benchmark.py
 ```
 
-**Run with only Deepgram + Whisper** (skip Google):
+**Enable Google Cloud** (optional, requires billing account):
 ```bash
-# Leave GOOGLE_APPLICATION_CREDENTIALS empty in .env
+# Edit asr_benchmark.py
+# Change: MODELS_TO_TEST = ["deepgram", "whisper"]
+# To:     MODELS_TO_TEST = ["deepgram", "whisper", "google"]
+# Then set GOOGLE_APPLICATION_CREDENTIALS in .env
+python asr_benchmark.py
+```
+
+**Local Whisper only** (free, no API needed):
+```bash
+# Edit asr_benchmark.py
+# Change: MODELS_TO_TEST = ["deepgram", "whisper"]
+# To:     MODELS_TO_TEST = ["whisper"]
 # Run: python asr_benchmark.py
-# Google Cloud will be skipped automatically
 ```
 
 **Fast validation run** (5 files instead of 20):
 ```bash
 # Copy only 5 audio files to ./recordings/
 # Run the benchmark - should complete in ~2 minutes
-```
-
-**Local Whisper only** (free, no API needed):
-```bash
-# Leave DEEPGRAM_API_KEY and GOOGLE_APPLICATION_CREDENTIALS empty in .env
-# Run: python asr_benchmark.py
-# Only Whisper will run
 ```
 
 **Debug single file:**
