@@ -28,6 +28,9 @@ credentials.json
 
 # Output (generated during benchmarks)
 outputs/
+
+# Learning materials (local only)
+LEARNING_GUIDE.md
 !outputs/.gitkeep
 
 # OS
