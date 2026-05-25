@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+
+# Credentials
+google-credentials.json
+credentials.json
+
+# API cache
+.cache/
+*.cache
+
+# Output (generated during benchmarks)
+outputs/
+!outputs/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db

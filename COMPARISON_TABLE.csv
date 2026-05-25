@@ -1,0 +1,11 @@
+Model,Condition,Samples,Entity_Accuracy,Failures,Success_Rate,Notes
+Deepgram-Nova2,PHONE,1,100%,0,100%,"Perfect on phone calls"
+Deepgram-Nova2,NOISY,1,100%,0,100%,"Excellent in background noise"
+Deepgram-Nova2,QUIET,5,80%,1,80%,"80% on clear recordings"
+Deepgram-Nova2,RUSHED,13,58%,5,58%,"Struggles with fast speech (main weakness)"
+Deepgram-Nova2,OVERALL,19,68%,6,68%,"1 API failure (yellanka sample)"
+Whisper-Base,PHONE,1,100%,0,100%,"Perfect on phone calls"
+Whisper-Base,NOISY,1,100%,0,100%,"Excellent in background noise"
+Whisper-Base,QUIET,5,60%,2,60%,"60% on clear recordings"
+Whisper-Base,RUSHED,13,46%,7,46%,"Significantly worse on fast speech"
+Whisper-Base,OVERALL,20,55%,9,55%,"No API failures (free local model)"
