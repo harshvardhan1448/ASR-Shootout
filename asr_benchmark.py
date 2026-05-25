@@ -15,7 +15,7 @@ import numpy as np
 from dotenv import load_dotenv
 
 # Import local modules
-from src.asr_models import transcribe_deepgram, transcribe_whisper, validate_audio_quality
+from src.asr_models import transcribe_deepgram, transcribe_whisper, transcribe_google_speech, validate_audio_quality
 from src.metrics import (
     compute_wer,
     compute_cer,
@@ -37,9 +37,10 @@ OUTPUTS_DIR.mkdir(exist_ok=True)
 
 DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY", "")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+GOOGLE_CREDENTIALS_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "")
 
 # Models to benchmark
-MODELS_TO_TEST = ["deepgram", "whisper"]  # Compare both models
+MODELS_TO_TEST = ["deepgram", "whisper", "google"]  # Compare all models
 
 
 class ASRBenchmark:
@@ -91,6 +92,26 @@ class ASRBenchmark:
             try:
                 # Use LOCAL Whisper model (free, no API key needed)
                 transcript, metadata = transcribe_whisper(str(audio_path), api_key="", use_api=False)
+                
+                if "error" in metadata:
+                    print(f"❌ Error: {metadata['error']}")
+                    return "", metadata
+                
+                print(f"✓ {len(transcript)} chars")
+                return transcript, metadata
+            
+            except Exception as e:
+                print(f"❌ {str(e)[:50]}")
+                return "", {"error": str(e)}
+        
+        elif model == "google":
+            print(f"  → google-cloud  : ", end="", flush=True)
+            try:
+                if not GOOGLE_CREDENTIALS_PATH:
+                    print("⚠️  Skipped (GOOGLE_APPLICATION_CREDENTIALS not set)")
+                    return "", {"error": "Google credentials not configured"}
+                
+                transcript, metadata = transcribe_google_speech(str(audio_path), GOOGLE_CREDENTIALS_PATH)
                 
                 if "error" in metadata:
                     print(f"❌ Error: {metadata['error']}")
